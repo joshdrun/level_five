@@ -7,23 +7,23 @@ def get_computer_choice():
 
 #a function to get the player choice
 def get_player_choice():
-    decision = input("Enter your choice (rock, paper, scissors): ").strip().lower()
+    decision = input("Enter your choice (rock, paper, scissors): ").lower()
     if decision != "rock" and decision != "paper" and decision != "scissors":
         print("Invalid choice. Please enter rock, paper, or scissors.")
-        get_player_choice()
+        return get_player_choice()
     else:
         return decision
     
 #a function to determine the winner of the game
 def determine_winner(player_choice, computer_choice):
     if player_choice == computer_choice:
-        return "Tie"
+        return "tie"
     elif (player_choice == "rock" and computer_choice == "scissors") or \
          (player_choice == "scissors" and computer_choice == "paper") or \
          (player_choice == "paper" and computer_choice == "rock"):
-        return "Player wins"
+        return "win"
     else:
-        return "Computer wins"
+        return "loss"
 
 #main game loop
 want_to_play = True
@@ -33,7 +33,11 @@ print("Welcome to Rock, Paper, Scissors!")
 while want_to_play == True:
     player_wins = 0
     computer_wins = 0
-    play_amount = int(input("How many times do you want to play? (must be an odd integer greater than 0) "))
+    try:
+        play_amount = int(input("How many times do you want to play? (must be an odd integer greater than 0) "))
+    except ValueError:
+        print("Please enter a whole number.")
+        continue
     if (play_amount % 2 == 0) or play_amount <= 0:
         print("Invalid amount, number of rounds must be ODD and more than 0 and an integer.")
         continue
@@ -43,23 +47,23 @@ while want_to_play == True:
         player_choice = get_player_choice()
         computer_choice = get_computer_choice()
         result = determine_winner(player_choice, computer_choice)
-        print(f"The computer chose {computer_choice}. {result}")
-        if result == "Player wins":
+        print(f"The computer chose {computer_choice}. Your result: {result}!")
+        if result == "win":
             player_wins += 1
-        elif result == "Computer wins":
+        elif result == "loss":
             computer_wins += 1
         else:
 
             #this was kind of hard, I wanted to make sure that you could get ties indefinitely before a winner is determined
             print("The round is a tie.")
-            while(result == "Tie"):
+            while result == "tie":
                 player_choice = get_player_choice()
                 computer_choice = get_computer_choice()
                 result = determine_winner(player_choice, computer_choice)
                 print(f"The computer chose {computer_choice}. {result}")
-                if result == "Player wins":
+                if result == "win":
                     player_wins += 1
-                elif result == "Computer wins":
+                elif result == "loss":
                     computer_wins += 1
                 else:
                     print("The round is a tie.")
